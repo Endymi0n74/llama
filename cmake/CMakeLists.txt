@@ -38,6 +38,11 @@ set(GGML_BUILD_EXAMPLES OFF CACHE BOOL "" FORCE)
 set(GGML_BACKEND_DL OFF CACHE BOOL "" FORCE)
 set(GGML_CPU_REPACK OFF CACHE BOOL "" FORCE)
 set(GGML_CUDA_NCCL OFF CACHE BOOL "" FORCE)
+# Deterministic GEMM routing for the koharu A/B builds: quantized matmuls go
+# through the fixed-split MMQ kernels instead of cuBLAS, and the CUDA VMM
+# allocator is disabled to remove address-layout variance.
+set(GGML_CUDA_FORCE_MMQ ON CACHE BOOL "" FORCE)
+set(GGML_CUDA_NO_VMM ON CACHE BOOL "" FORCE)
 set(GGML_HIP_RCCL OFF CACHE BOOL "" FORCE)
 set(GGML_METAL_NDEBUG ON CACHE BOOL "" FORCE)
 set(GGML_NATIVE OFF CACHE BOOL "" FORCE)
