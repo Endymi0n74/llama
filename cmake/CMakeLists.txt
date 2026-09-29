@@ -38,6 +38,9 @@ set(GGML_BUILD_EXAMPLES OFF CACHE BOOL "" FORCE)
 set(GGML_BACKEND_DL OFF CACHE BOOL "" FORCE)
 set(GGML_CPU_REPACK OFF CACHE BOOL "" FORCE)
 set(GGML_CUDA_NCCL OFF CACHE BOOL "" FORCE)
+# A/B isolation build: compile out the CUDA FlashAttention kernels so attention
+# falls back to the MUL_MAT path (tests whether FA kernels cause decode flips).
+set(GGML_CUDA_FA OFF CACHE BOOL "" FORCE)
 set(GGML_HIP_RCCL OFF CACHE BOOL "" FORCE)
 set(GGML_METAL_NDEBUG ON CACHE BOOL "" FORCE)
 set(GGML_NATIVE OFF CACHE BOOL "" FORCE)

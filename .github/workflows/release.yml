@@ -2,6 +2,11 @@ name: Llama
 
 on:
   workflow_dispatch:
+    inputs:
+      tag:
+        description: 'llama.cpp tag to build (empty: latest upstream release)'
+        required: false
+        default: ''
   schedule:
     - cron: '17 3 * * *'
   push:
@@ -18,6 +23,8 @@ jobs:
   source:
     name: Resolve latest release
     runs-on: ubuntu-latest
+    env:
+      REQUESTED_TAG: ${{ inputs.tag }}
     outputs:
       tag: ${{ steps.release.outputs.tag }}
       release_tag: ${{ steps.release.outputs.release_tag }}
@@ -28,7 +35,8 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
-          tag=$(gh api repos/ggml-org/llama.cpp/releases --jq '.[0].tag_name')
+          tag=${REQUESTED_TAG:-$(gh api repos/ggml-org/llama.cpp/releases --jq '.[0].tag_name')}
+          gh api "repos/ggml-org/llama.cpp/git/ref/tags/$tag" --jq '.ref' >/dev/null
           existing_tags=$(gh api --paginate "repos/$GITHUB_REPOSITORY/releases?per_page=100" --jq '.[].tag_name')
           release_tag=$tag
           suffix=1
